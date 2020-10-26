@@ -16,10 +16,6 @@ const AlertSchema = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
-    },
-    key: {
-        type: Number,
-        required: true
     }
 });
 

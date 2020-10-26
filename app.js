@@ -5,31 +5,16 @@ require('dotenv/config');
 const Alert = require('./models/Alert');
 
 const app = express();
-
 app.use(bodyParser.json());
-
-
-// Database
 
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser : true, useUnifiedTopology: true }, () => {
     console.log('connected to db');
 });
+mongoose.set('useFindAndModify', false);
 
 
 // Routes
 
-// async style
-app.get('/alert/:id', async (request, response) => {
-    try {
-        const aqiAlert = await Alert.findById(request.params.id);
-        response.json(aqiAlert);
-    } catch {
-        response.json({ message: "Could not find alert." });
-    }
-    
-})
-
-// promise style
 app.post('/', (request, response) => {
     const aqiAlert = new Alert({
         sensor: request.body.sensor,
@@ -46,8 +31,39 @@ app.post('/', (request, response) => {
     });
 })
 
+app.get('/alert/:id', (request, response) => {
+    Alert.findById(request.params.id, (error, data) => {
+        if ((error) || (data == null)) {
+            response.json({ message: "Could not find alert." });
+            return;
+        }
+        response.json(data);
+    });
+})
 
+app.put('/alert/:id', (request, response) => {
+    Alert.findByIdAndUpdate(request.params.id, {
+        sensor: request.body.sensor,
+        limit: request.body.limit,
+        lower: request.body.lower
+        }, (error, data) => {
+            if ((error) || (data == null)) {
+                response.json({ message: error });
+                return;
+            }
+            response.json(data);
+    });
+})
 
+app.delete('/alert/:id', (request, response) => {
+    Alert.findByIdAndDelete(request.params.id, (error, data) => {
+        if ((error) || (data == null)) {
+            response.json({ message: error });
+            return;
+        }
+        response.json({ message: "Alert deleted." });
+    });
+})
 
 
 app.listen(8000);
