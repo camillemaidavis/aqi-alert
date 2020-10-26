@@ -1,16 +1,20 @@
 const mongoose = require('mongoose');
 
 const AlertSchema = mongoose.Schema({
-    sensor: {
-        type: Number,
+    email: {
+        type: String,
         required: true
     },
     limit: {
         type: Number,
         required: true
     },
-    lower: {
+    below: {
         type: Boolean,
+        required: true
+    },
+    zip: {
+        type: Number,
         required: true
     },
     date: {

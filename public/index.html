@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <title>
+            AQI Alert
+        </title>
+        <script>
+            /* html = document.querySelector('html');
+            html.classList.remove('no-js'); */
+        </script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <meta name="keywords" content="">
+        <meta name="description" content="j">
+        <link rel=stylesheet href="/style.css">
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+    </head>
+    <body>
+        <main class="container">
+            <form action="/" method="post" class="inner">
+                <p>Email me at</p>
+                <input name="email" id="email" type="email" placeholder="email@example.com" required />
+                <p>when the AQI goes</p>
+                <div id="radio-holder" class="no-js">
+                    <input id="false" name="below" type="radio" class="false" value="false" checked>
+                    <label for="false">Above</label>
+                    <input id="true" name="below" type="radio" class="true" value="true">
+                    <label for="true">Below</label>
+                </div>
+                <div id="bool-holder" style="display:none;">
+                    <button class="above">above</button>
+                    <button class="below">below</button>
+                </div>
+                <input name="limit" id="limit" type="number" placeholder="AQI" required />
+                <p>near</p>
+                <input name="zip" id="zip" type="number" placeholder="ZIP" />
+                <button type="submit" id="save">Save</button>
+            </form>
+        </main>
+    </body>
+</html>

@@ -3,9 +3,12 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 require('dotenv/config');
 const Alert = require('./models/Alert');
-
+const { body,validationResult } = require('express-validator');
 const app = express();
-app.use(bodyParser.json());
+
+//app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser : true, useUnifiedTopology: true }, () => {
     console.log('connected to db');
@@ -15,11 +18,18 @@ mongoose.set('useFindAndModify', false);
 
 // Routes
 
+app.get('/', (request, response) => {
+    response.sendFile(path.join(__dirname + '/index.html'));
+})
+
 app.post('/', (request, response) => {
+    console.log(request.body);
+
     const aqiAlert = new Alert({
-        sensor: request.body.sensor,
+        email: request.body.email,
+        below: request.body.below,
         limit: request.body.limit,
-        lower: request.body.lower
+        zip: request.body.zip
     });
 
     aqiAlert.save()
@@ -28,7 +38,7 @@ app.post('/', (request, response) => {
     })
     .catch((error) => {
         response.status(404).json({ message: error });
-    });
+    })
 })
 
 app.get('/alert/:id', (request, response) => {
@@ -38,7 +48,7 @@ app.get('/alert/:id', (request, response) => {
             return;
         }
         response.json(data);
-    });
+    })
 })
 
 app.put('/alert/:id', (request, response) => {
